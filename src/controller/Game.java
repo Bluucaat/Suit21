@@ -31,14 +31,25 @@ public class Game {
         for (Player player : players) {
             System.out.println("-".repeat(30) + "\n" + player + "\n" + "-".repeat(30));
             playerAction.dropCard(player);
-            if (player.getHandValue() == 21) {
+            if (isPlayerWinner(player)) {
                 playersWith21Hands.add(player);
             }
             playerAction.drawCard(player, deck);
-            if (player.getHandValue() == 21) {
+            if (isPlayerWinner(player)) {
                 playersWith21Hands.add(player);
             }
         }
+    }
+
+    private boolean isPlayerWinner(Player player) {
+        Map<Card.Suit, Integer> suitValues = player.getSuitValues();
+
+        for (Integer value : suitValues.values()) {
+            if (value == 21) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean gameNotOver() {
@@ -47,11 +58,11 @@ public class Game {
 
     public String gameOverType() {
         if (playersWith21Hands.size() > 1) {
-            return "Game over! Multiple players achieved 21, nobody gets a point!";
+            return "Game over! Multiple players achieved 21 in a suit, nobody gets a point!";
         } else if (playersWith21Hands.size() == 1) {
             return "Game over! \n" + playersWith21Hands + "\nscores a point!";
         } else {
-            return "The deck is out of cards. No players have a deck with value of 21. It's a draw!";
+            return "The deck is out of cards. No players have a suit with value of 21. It's a draw!";
         }
     }
 

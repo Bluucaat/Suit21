@@ -44,7 +44,7 @@ public class PlayerActions {
                     }
                     System.out.println("Player dropped card: " + player.getPlayerHand().get(index));
                     player.removeCardFromHand(index);
-                    System.out.println("Updated hand value: " + player.getHandValue());
+                    System.out.println("Updated suit values after dropping: " + player.getSuitValues());
                     validInput = true;
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid number! Enter a number between 1-5\n");
@@ -58,8 +58,7 @@ public class PlayerActions {
             Card drawnCard = deck.removeFirst();
             player.addCardToHand(drawnCard);
             System.out.println("New card handed out. Updated hand: " + player.getPlayerHand());
-            System.out.println("Updated hand value after drawing: " + player.getHandValue());
+            System.out.println("Updated suit values after drawing: " + player.getSuitValues());
         }
     }
-
 }

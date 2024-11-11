@@ -2,13 +2,17 @@ package model;
 
 import java.util.*;
 
+import model.Card.Suit;
+
 public class Player {
     private String playerName;
     private int playerId;
     private List<Card> playerHand;
+    private Map<Suit, Integer> suitValues;
     private boolean isComputer;
 
     public Player() {
+        suitValues = new EnumMap<>(Suit.class);
     }
 
     public void setPlayerName(String playerName) {
@@ -33,34 +37,31 @@ public class Player {
 
     public void setPlayerHand(List<Card> playerHand) {
         this.playerHand = playerHand;
+        updateSuitValues();
     }
 
     public void addCardToHand(Card card) {
         this.playerHand.add(card);
+        updateSuitValues();
     }
 
     public void removeCardFromHand(int index) {
         this.playerHand.remove(index);
+        updateSuitValues();
     }
 
-    public int getHandValue() {
-        int deckValue = 0;
-        boolean hasAce = false;
-
-
-        for (var card : playerHand) {
-            deckValue += card.rank();
-            if (card.face().charAt(0) == 'A') {
-                hasAce = true;
-            }
+    private void updateSuitValues() {
+        suitValues.clear();
+        for (Card card : playerHand) {
+            Suit suit = card.suit();
+            int cardValue = card.rank();
+            suitValues.put(suit, suitValues.getOrDefault(suit, 0) + cardValue);
         }
-
-        if (hasAce && deckValue + 10 <= 21) {
-            deckValue += 10;
-        }
-        return deckValue;
     }
 
+    public Map<Suit, Integer> getSuitValues() {
+        return suitValues;
+    }
 
     public static ArrayList<Player> generatePlayers(Scanner sc, int amountOfPlayers, List<Card> deck) {
         ArrayList<Player> players = new ArrayList<>();
@@ -101,8 +102,20 @@ public class Player {
 
     @Override
     public String toString() {
-        return
-                 "Player " + playerId + ", " + playerName + ":\n" + "Deck value: " + getHandValue()
-                        + "\nDeck: " + playerHand;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player ").append(playerId).append(", ").append(playerName).append(":\n");
+
+        sb.append("Suit Values:\n");
+        int size = suitValues.size();
+        int index = 0;
+        for (Map.Entry<Suit, Integer> entry : suitValues.entrySet()) {
+            sb.append(entry.getKey()).append(": ").append(entry.getValue());
+            if (index < size - 1) {
+                sb.append(", ");
+            }
+            index++;
+        }
+        sb.append("\nHand: ").append(playerHand);
+        return sb.toString();
     }
 }
