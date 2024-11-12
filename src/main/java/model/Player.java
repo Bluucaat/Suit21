@@ -7,12 +7,29 @@ import model.Card.Suit;
 public class Player {
     private String playerName;
     private int playerId;
+    private int playerScore;
     private List<Card> playerHand;
     private Map<Suit, Integer> suitValues;
     private boolean isComputer;
 
     public Player() {
         suitValues = new EnumMap<>(Suit.class);
+    }
+
+    public int getPlayerScore() {
+        return playerScore;
+    }
+
+    public void setPlayerScore(int playerScore) {
+        this.playerScore = playerScore;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public int getPlayerId() {
+        return playerId;
     }
 
     public void setPlayerName(String playerName) {

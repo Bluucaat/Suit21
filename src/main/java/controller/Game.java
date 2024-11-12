@@ -9,22 +9,30 @@ public class Game {
     private Scanner sc;
     private List<Player> players;
     private List<Card> deck;
-    private Set<Player> playersWith21Hands;
+    private List<Player> playersWith21Hands;
     private PlayerActions playerAction;
 
     public Game() {
         sc = new Scanner(System.in);
         deck = Card.getStandardShuffledDeck();
         players = Player.generatePlayers(sc, getAmountOfPlayers(), deck);
-        playersWith21Hands = new HashSet<>();
+        playersWith21Hands = new ArrayList<>();
         playerAction = new PlayerActions(sc);
     }
 
     public void playGame() {
-        while (gameNotOver()) {
-            action();
+        int amountOfGames = getAmountOfGames();
+        for (int i = 0; i < amountOfGames; i++) {
+            System.out.println("Game number " + amountOfGames);
+            playersWith21Hands.clear();
+            deck = Card.getStandardShuffledDeck();
+            while (gameNotOver()) {
+                action();
+            }
+            System.out.println(gameOverType());
+            printPlayerScoreBoard();
         }
-        System.out.println(gameOverType());
+
     }
 
     private void action() {
@@ -33,10 +41,14 @@ public class Game {
             playerAction.dropCard(player);
             if (isPlayerWinner(player)) {
                 playersWith21Hands.add(player);
+                player.setPlayerScore(player.getPlayerScore() + 1);
+                return;
             }
             playerAction.drawCard(player, deck);
             if (isPlayerWinner(player)) {
                 playersWith21Hands.add(player);
+                player.setPlayerScore(player.getPlayerScore() + 1);
+                return;
             }
         }
     }
@@ -59,11 +71,42 @@ public class Game {
     public String gameOverType() {
         if (playersWith21Hands.size() > 1) {
             return "Game over! Multiple players achieved 21 in a suit, nobody gets a point!";
+
         } else if (playersWith21Hands.size() == 1) {
-            return "Game over! \n" + playersWith21Hands + "\nscores a point!";
+            return "Game over! \n" + playersWith21Hands.getFirst() + "\nscores a point!";
         } else {
             return "The deck is out of cards. No players have a suit with value of 21. It's a draw!";
         }
+    }
+
+    public void printPlayerScoreBoard() {
+        Collections.sort(players, Comparator.comparing(Player::getPlayerScore).reversed());
+        System.out.println("-".repeat(30));
+        System.out.println("Game results");
+        System.out.println("-".repeat(30));
+        for (Player player : players) {
+
+            System.out.println("Player " +
+                    player.getPlayerId() + ", " + player.getPlayerName() +
+                    ": " + player.getPlayerScore());
+        }
+        System.out.println("-".repeat(30));
+    }
+
+    public int getAmountOfGames() {
+        int amount;
+        try {
+            System.out.println("Enter a number of games to be played!");
+            amount = Integer.parseInt(sc.nextLine());
+            if (amount > 10 || amount < 1) {
+                System.out.println("Invalid amount of games entered. enter a number between 1-10");
+                return getAmountOfGames();
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid amount of games entered. enter a number between 1-10");
+            return getAmountOfGames();
+        }
+        return amount;
     }
 
     public int getAmountOfPlayers() {
