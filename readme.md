@@ -11,15 +11,12 @@ Suit 21 is a multiplayer card game for two to six players. The objective is to a
 
 ## Introduction
 
-Suit 21 is based on a classic card game where players attempt to score exactly 21 points in a single suit. This version includes:
-- Single-player or multiplayer mode (2 to 6 players)
-- Option to play against a computer
-- Automatic selection of the most beneficial Ace value for players (1 or 11)
+Suit 21 is based on a classic card game where players attempt to score exactly 21 points in a single suit. This code follows the MVC Design Pattern.
 
-## Game Rules
-
-- **Setup**: Each player is dealt five cards from a shuffled standard deck.
-- **Objective**: Obtain a hand of cards that totals exactly 21 points.
+- **Setup**: 
+    - Each player is dealt five cards from a shuffled standard deck.
+- **Objective**:
+    - Obtain a hand of cards that totals exactly 21 points.
 - **Card Values**:
     - Number cards (2-10) are worth their face values.
     - Picture cards (Jack, Queen, King) are worth 10 points.
@@ -37,4 +34,5 @@ Suit 21 is based on a classic card game where players attempt to score exactly 2
 - **Multiplayer Support**: Play with up to six players.
 - **Computer Opponent**: Add a computer player by entering "Computer" as a player name (Not very smart).
 - **Random Card Draw**: The deck shuffles at the start, and each player's hand updates based on their actions.
+- **Dynamic Ace Value**: The Ace can automatically adjust its value to either 1 or 11, whichever makes the player's hand closest to 21 without exceeding it.
 
