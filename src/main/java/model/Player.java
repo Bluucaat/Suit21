@@ -1,10 +1,10 @@
 package model;
 
 import java.util.*;
-
+import lombok.Data;
 import model.Card.Suit;
 
-public class Player {
+public @Data class Player {
     private String playerName;
     private int playerId;
     private int playerScore;
@@ -13,51 +13,14 @@ public class Player {
     private boolean isComputer;
 
     public Player() {
+        playerName = "Player";
         suitValues = new EnumMap<>(Suit.class);
     }
 
-    public int getPlayerScore() {
-        return playerScore;
-    }
-
-    public void setPlayerScore(int playerScore) {
-        this.playerScore = playerScore;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
-
-    public boolean isComputer() {
-        return isComputer;
-    }
-
-    public void setComputer(boolean computer) {
-        isComputer = computer;
-    }
-
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
-
-    public List<Card> getPlayerHand() {
-        return playerHand;
-    }
-
-    public void setPlayerHand(List<Card> playerHand) {
-        this.playerHand = playerHand;
-        updateSuitValues();
-    }
-
     public void addCardToHand(Card card) {
+        if(this.playerHand == null) {
+            this.playerHand = new ArrayList<>();
+        }
         this.playerHand.add(card);
         updateSuitValues();
     }
@@ -72,15 +35,19 @@ public class Player {
         for (Card card : playerHand) {
             Suit suit = card.suit();
             int cardValue = card.rank();
+            if (card.rank() == 1) {
+                int currentSuitValue = suitValues.getOrDefault(suit, 0);
+
+                if (currentSuitValue + 11 <= 21) {
+                    cardValue = 11;
+                }
+            }
             suitValues.put(suit, suitValues.getOrDefault(suit, 0) + cardValue);
         }
     }
 
-    public Map<Suit, Integer> getSuitValues() {
-        return suitValues;
-    }
 
-    public static ArrayList<Player> generatePlayers(Scanner sc, int amountOfPlayers, List<Card> deck) {
+    public static ArrayList<Player> generatePlayers(Scanner sc, int amountOfPlayers) {
         ArrayList<Player> players = new ArrayList<>();
 
         for (int i = 1; i < amountOfPlayers + 1; i++) {
@@ -89,19 +56,20 @@ public class Player {
             Player player = new Player();
             player.setPlayerId(i);
             player.setPlayerName(playerName);
-            player.setPlayerHand(generateHand(deck));
             player.setComputer(playerName.equalsIgnoreCase("Computer"));
             players.add(player);
         }
         return players;
     }
 
-    public static List<Card> generateHand(List<Card> deck) {
-        List<Card> hand = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            hand.add(deck.removeFirst());
+    public void generateHand(List<Card> deck) {
+        if (playerHand == null) {
+            playerHand = new ArrayList<>();
         }
-        return hand;
+        playerHand.clear();
+        for (int i = 0; i < 5; i++) {
+            playerHand.add(deck.removeFirst());
+        }
     }
 
     @Override

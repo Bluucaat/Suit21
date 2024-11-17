@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public record Card(Suit suit, String face, int rank) {
+public record Card(Suit suit, String face, int rank) implements Comparable<Card>{
+
     public enum Suit {
         CLUB, DIAMOND, HEART, SPADE;
 
@@ -20,6 +21,11 @@ public record Card(Suit suit, String face, int rank) {
         return this.suit.getImage() + " " + faceString;
     }
 
+    @Override
+    public int compareTo(Card other) {
+        return Integer.compare(this.rank, other.rank);
+    }
+
     public static Card getNumbericCard(Suit suit, int rank) {
         return new Card(suit, String.valueOf(rank), rank);
     }
@@ -28,7 +34,7 @@ public record Card(Suit suit, String face, int rank) {
         if(abbr == 'A'){
             return new Card(suit, String.valueOf(abbr), 1);
         }else
-        return new Card(suit, String.valueOf(abbr), 10);
+            return new Card(suit, String.valueOf(abbr), 10);
     }
 
     public static List<Card> getStandardShuffledDeck() {
