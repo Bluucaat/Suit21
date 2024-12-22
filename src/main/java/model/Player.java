@@ -47,21 +47,6 @@ public @Data class Player {
     }
 
 
-    public static ArrayList<Player> generatePlayers(Scanner sc, int amountOfPlayers) {
-        ArrayList<Player> players = new ArrayList<>();
-
-        for (int i = 1; i < amountOfPlayers + 1; i++) {
-            System.out.println("Enter player name: ");
-            String playerName = sc.nextLine();
-            Player player = new Player();
-            player.setPlayerId(i);
-            player.setPlayerName(playerName);
-            player.setComputer(playerName.equalsIgnoreCase("Computer"));
-            players.add(player);
-        }
-        return players;
-    }
-
     public void generateHand(List<Card> deck) {
         if (playerHand == null) {
             playerHand = new ArrayList<>();
@@ -70,6 +55,7 @@ public @Data class Player {
         for (int i = 0; i < 5; i++) {
             playerHand.add(deck.removeFirst());
         }
+        updateSuitValues();
     }
 
     @Override
@@ -87,20 +73,9 @@ public @Data class Player {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Player ").append(playerId).append(", ").append(playerName).append(":\n");
-
-        sb.append("Suit Values:\n");
-        int size = suitValues.size();
-        int index = 0;
-        for (Map.Entry<Suit, Integer> entry : suitValues.entrySet()) {
-            sb.append(entry.getKey()).append(": ").append(entry.getValue());
-            if (index < size - 1) {
-                sb.append(", ");
-            }
-            index++;
-        }
-        sb.append("\nHand: ").append(playerHand);
-        return sb.toString();
+         return "Player " + playerId + ", " + playerName + ":\n" +
+                "Suit Values:\n" +
+                suitValues.toString() +
+                "\nHand: " + playerHand;
     }
 }

@@ -10,14 +10,10 @@ public class GameApp {
     public static void main(String[] args) {
 
         GameView gameView = new GameView();
-
-        int playerCount = gameView.getAmountOfPlayers();
-        int roundCount = gameView.getAmountOfGames();
-
-        List<Player> players = Player.generatePlayers(new Scanner(System.in), playerCount);
+        List<Player> players = gameView.generatePlayers(new Scanner(System.in));
         GameController gameController = new GameController(players);
         GameHandler gameHandler = new GameHandler(gameController, gameView);
 
-        gameHandler.startGame(roundCount);
+        gameHandler.play(gameView.getAmountOfGames());
     }
 }

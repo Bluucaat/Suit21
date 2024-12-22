@@ -12,14 +12,14 @@ public class GameHandler {
         this.view = view;
     }
 
-    public void startGame(int roundAmount) {
+    public void play(int roundAmount) {
         for (int i = 0; i < roundAmount; i++) {
             view.displayRoundStartMessage(i + 1);
             gameController.startGame();
-            while (gameController.gameNotOver()) {
+            while (gameController.gameOngoing()) {
                 for (Player player : gameController.getPlayers()) {
                     view.displayPlayerInfo(player);
-                    gameController.action(player, i); // Pass round count if necessary
+                    gameController.action(player);
                 }
             }
             view.printGameOverType(gameController.getGameOverMessage());

@@ -12,7 +12,8 @@ import java.util.List;
 public class GameController {
     @Getter
     private final List<Player> players;
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<Card> deck;
     @Getter
     private final List<Player> playersWith21Hands;
@@ -32,15 +33,15 @@ public class GameController {
         }
     }
 
-    public void action(Player player, int roundCount) {
+    public void action(Player player) {
         playerAction.dropCard(player);
-        if (isPlayerWinner(player) && roundCount != 0) {
+        if (isPlayerWinner(player)) {
             playersWith21Hands.add(player);
             player.setPlayerScore(player.getPlayerScore() + 1);
             return;
         }
         playerAction.drawCard(player, deck);
-        if (isPlayerWinner(player) && roundCount != 0) {
+        if (isPlayerWinner(player)) {
             playersWith21Hands.add(player);
             player.setPlayerScore(player.getPlayerScore() + 1);
         }
@@ -50,7 +51,7 @@ public class GameController {
         return player.getSuitValues().containsValue(21);
     }
 
-    public boolean gameNotOver() {
+    public boolean gameOngoing() {
         return playersWith21Hands.isEmpty() && !deck.isEmpty();
     }
 
@@ -63,5 +64,7 @@ public class GameController {
             return "The deck is out of cards. No players have a suit with value of 21. It's a draw!";
         }
     }
+
+
 
 }

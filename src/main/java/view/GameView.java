@@ -2,6 +2,7 @@ package view;
 
 import model.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,4 +67,21 @@ public class GameView {
     public void displayRoundStartMessage(int round) {
         System.out.println("Starting Round " + round + "!");
     }
+
+    public  ArrayList<Player> generatePlayers(Scanner sc) {
+        ArrayList<Player> players = new ArrayList<>();
+        int amountOfPlayers = this.getAmountOfPlayers();
+        for (int i = 1; i < amountOfPlayers + 1; i++) {
+            System.out.println("Enter player name: ");
+            String playerName = sc.nextLine();
+            Player player = new Player();
+            player.setPlayerId(i);
+            player.setPlayerName(playerName);
+            player.setComputer(playerName.equalsIgnoreCase("Computer"));
+            players.add(player);
+        }
+        return players;
+    }
 }
+
+
